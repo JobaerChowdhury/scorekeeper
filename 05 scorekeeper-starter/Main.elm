@@ -62,20 +62,19 @@ add model =
         }
 
 
+updatePlayerIf : Int -> (Player -> Player) -> Player -> Player
+updatePlayerIf targetId updater player =
+    if (player.id == targetId) then
+        updater player
+    else
+        player
+
+
 edit : Model -> Int -> Model
 edit model id =
     let
-        updateName player =
-            { player | name = model.playerName }
-
-        transformer player =
-            if (player.id == id) then
-                updateName player
-            else
-                player
-
         updatedPlayers =
-            List.map transformer model.players
+            List.map (updatePlayerIf id (\p -> { p | name = model.playerName })) model.players
 
         updatedPlays =
             List.map
@@ -113,12 +112,7 @@ score model player s =
 
         updatedPlayers =
             List.map
-                (\p ->
-                    if (p.id == player.id) then
-                        { p | points = p.points + s }
-                    else
-                        p
-                )
+                (updatePlayerIf player.id (\p -> { p | points = p.points + s }))
                 model.players
 
         newPlay =
@@ -139,12 +133,7 @@ delete model play =
     let
         updatedPlayers =
             List.map
-                (\p ->
-                    if (p.id == play.playerId) then
-                        { p | points = p.points - play.points }
-                    else
-                        p
-                )
+                (updatePlayerIf play.playerId (\p -> { p | points = p.points - play.points }))
                 model.players
 
         updatedPlays =
