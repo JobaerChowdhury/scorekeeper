@@ -233,7 +233,7 @@ playerList model =
     -- ul [] (List.map showPlayer model.players)
     model.players
         |> List.sortBy .name
-        |> List.map (showPlayer model)
+        |> List.map (showPlayer model.playerId)
         |> ul []
 
 
@@ -271,8 +271,8 @@ playListHeading =
         ]
 
 
-showPlayer : Model -> Player -> Html Msg
-showPlayer model player =
+showPlayer : Maybe Int -> Player -> Html Msg
+showPlayer editId player =
     li []
         [ i
             [ class "edit"
@@ -280,7 +280,7 @@ showPlayer model player =
             ]
             []
         , div
-            [ class (editPlayerClass player model) ]
+            [ class (editPlayerClass player editId) ]
             [ text player.name ]
         , button
             [ type' "button"
@@ -325,24 +325,24 @@ playerForm model =
         ]
 
 
-editPlayerClass : Player -> Model -> String
-editPlayerClass player model =
-    case model.playerId of
-        Just x ->
-            if (x == player.id) then
-                "edit"
-            else
-                ""
-
-        Nothing ->
-            ""
+editPlayerClass : Player -> Maybe Int -> String
+editPlayerClass player editId =
+    addEditClass ((==) player.id) editId
 
 
 editInputClass : Maybe Int -> String
-editInputClass eId =
-    case eId of
+editInputClass editId =
+    addEditClass (\x -> True) editId
+
+
+addEditClass : (Int -> Bool) -> Maybe Int -> String
+addEditClass cond editId =
+    case editId of
         Just x ->
-            "edit"
+            if (cond x) then
+                "edit"
+            else
+                ""
 
         Nothing ->
             ""
