@@ -20,19 +20,20 @@ type alias Model =
     }
 
 
-type alias Player =
-    { id : Int
-    , name : String
-    , points : Int
+type alias Common a =
+    { a
+        | id : Int
+        , name : String
+        , points : Int
     }
+
+
+type alias Player =
+    Common {}
 
 
 type alias Play =
-    { id : Int
-    , playerName : String
-    , playerId : Int
-    , points : Int
-    }
+    Common { playerId : Int }
 
 
 initialModel : Model
@@ -53,7 +54,7 @@ add model =
             model.nextId + 1
 
         player =
-            Player model.nextId model.playerName 0
+            { id = model.nextId, name = model.playerName, points = 0 }
     in
         { model
             | players = player :: model.players
@@ -62,7 +63,7 @@ add model =
         }
 
 
-updateHavingId : Int -> (Player -> Player) -> Player -> Player
+updateHavingId : Int -> (Common a -> Common a) -> Common a -> Common a
 updateHavingId targetId updater player =
     if (player.id == targetId) then
         updater player
@@ -70,7 +71,7 @@ updateHavingId targetId updater player =
         player
 
 
-applyEdit : Int -> (Player -> Player) -> List Player -> List Player
+applyEdit : Int -> (Common a -> Common a) -> List (Common a) -> List (Common a)
 applyEdit targetId updater list =
     List.map (updateHavingId targetId updater) list
 
@@ -82,14 +83,7 @@ edit model id =
             applyEdit id (\p -> { p | name = model.playerName }) model.players
 
         updatedPlays =
-            List.map
-                (\play ->
-                    if (play.playerId == id) then
-                        { play | playerName = model.playerName }
-                    else
-                        play
-                )
-                model.plays
+            applyEdit id (\p -> { p | name = model.playerName }) model.plays
     in
         { model
             | players = updatedPlayers
@@ -119,7 +113,7 @@ score model player s =
             applyEdit player.id (\p -> { p | points = p.points + s }) model.players
 
         newPlay =
-            Play model.nextPlayId player.name player.id s
+            { id = model.nextPlayId, name = player.name, playerId = player.id, points = s }
 
         updatedPlays =
             newPlay :: model.plays
@@ -138,9 +132,7 @@ delete model play =
             applyEdit play.playerId (\p -> { p | points = p.points - play.points }) model.players
 
         updatedPlays =
-            List.filter
-                (\p -> p.id /= play.id)
-                model.plays
+            List.filter (\p -> p.id /= play.id) model.plays
     in
         { model
             | players = updatedPlayers
@@ -294,7 +286,7 @@ showPlay play =
             , onClick (DeletePlay play)
             ]
             []
-        , div [] [ text play.playerName ]
+        , div [] [ text play.name ]
         , div [] [ text (toString play.points) ]
         ]
 
