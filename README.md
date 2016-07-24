@@ -1,25 +1,10 @@
-# Notes
+# Readme
 
-This directory contains the starter / build process for the scorekeeper app.  Use it as a starting point for building your app.
+This is a sample score keeper app written in Elm. It's a slightly modified version of the example in [knowthen's](https://github.com/knowthen/elm) "Elm for Beginners" course.
 
-You can find the completed for each video in the following folders:
-
-## Planning the Scorekeeper App
-
-Code found in the `scorekeeper-planning` directory
-
-## Beginning our Scorekeeper App | Model & Form Sections of Update and View
-
-Code found in the `scorekeeper-player-form` directory
-
-## Completing the Form Section
-
-Code found in the `scorekeeper-player-form-save-cancel` directory
-
-## Creating the Player Section
-
-Code found in the `scorekeeper-player-section` directory
-
-## Creating the Play Section
-
-Code found in the `scorekeeper-plays-section` directory
+## To run the project do the following
+* Install node and elm
+* Run ```npm install```
+* Run ```elm-package install```
+* Run ```gulp```
+* Go to the [url](http://localhost:4000) shown by gulp
