@@ -63,27 +63,26 @@ add model =
         }
 
 
-updateHavingId : Int -> (Common a -> Common a) -> Common a -> Common a
-updateHavingId targetId updater player =
-    if (player.id == targetId) then
-        updater player
-    else
-        player
-
-
-applyEdit : Int -> (Common a -> Common a) -> List (Common a) -> List (Common a)
-applyEdit targetId updater list =
-    List.map (updateHavingId targetId updater) list
+applyEdit : (Common a -> Bool) -> (Common a -> Common a) -> List (Common a) -> List (Common a)
+applyEdit pred trans list =
+    let
+        filter a =
+            if (pred (a)) then
+                Just (trans (a))
+            else
+                Just a
+    in
+        List.filterMap filter list
 
 
 edit : Model -> Int -> Model
 edit model id =
     let
         updatedPlayers =
-            applyEdit id (\p -> { p | name = model.playerName }) model.players
+            applyEdit (\p -> p.id == id) (\p -> { p | name = model.playerName }) model.players
 
         updatedPlays =
-            applyEdit id (\p -> { p | name = model.playerName }) model.plays
+            applyEdit (\p -> p.playerId == id) (\p -> { p | name = model.playerName }) model.plays
     in
         { model
             | players = updatedPlayers
@@ -106,11 +105,8 @@ save model =
 score : Model -> Player -> Int -> Model
 score model player s =
     let
-        newPlayId =
-            model.nextPlayId + 1
-
         updatedPlayers =
-            applyEdit player.id (\p -> { p | points = p.points + s }) model.players
+            applyEdit (\p -> p.id == player.id) (\p -> { p | points = p.points + s }) model.players
 
         newPlay =
             { id = model.nextPlayId, name = player.name, playerId = player.id, points = s }
@@ -121,7 +117,7 @@ score model player s =
         { model
             | players = updatedPlayers
             , plays = updatedPlays
-            , nextPlayId = newPlayId
+            , nextPlayId = model.nextPlayId + 1
         }
 
 
@@ -129,7 +125,7 @@ delete : Model -> Play -> Model
 delete model play =
     let
         updatedPlayers =
-            applyEdit play.playerId (\p -> { p | points = p.points - play.points }) model.players
+            applyEdit (\p -> p.id == play.playerId) (\p -> { p | points = p.points - play.points }) model.players
 
         updatedPlays =
             List.filter (\p -> p.id /= play.id) model.plays
@@ -189,7 +185,6 @@ view model =
         , showPlayers model
         , playerForm model
         , showPlays model
-          -- , p [] [ text (toString model) ]  -- for debug purpose
         ]
 
 
@@ -212,7 +207,6 @@ playerListHeader =
 
 playerList : Model -> Html Msg
 playerList model =
-    -- ul [] (List.map showPlayer model.players)
     model.players
         |> List.sortBy .name
         |> List.map (showPlayer model.playerId)
