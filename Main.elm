@@ -50,15 +50,12 @@ initialModel =
 add : Model -> Model
 add model =
     let
-        newId =
-            model.nextId + 1
-
         player =
             { id = model.nextId, name = model.playerName, points = 0 }
     in
         { model
             | players = player :: model.players
-            , nextId = newId
+            , nextId = model.nextId + 1
             , playerName = ""
         }
 

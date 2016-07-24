@@ -1,30 +1,25 @@
-# Elm For Beginners
-This repo is the source companion to the following course on Learning Elmlang:
-http://courses.knowthen.com/courses/elm-for-beginners
+# Notes
 
-This course teaches beginners how to write frontend web apps using the awesome functional programming language: Elmlang
+This directory contains the starter / build process for the scorekeeper app.  Use it as a starting point for building your app.
 
-#### Why you should take this course?
+You can find the completed for each video in the following folders:
 
-Elm is an amazing language that offers many benefits like:
+## Planning the Scorekeeper App
 
-* Zero Runtime Exceptions
-* Simplified Debugging
-* Easy Refactoring
-* An Amazingly helpful type system
-* Improved Productivity
-* Inherently Testable Code
-* Enforced Semantic Versioning
-* and much more...
+Code found in the `scorekeeper-planning` directory
 
+## Beginning our Scorekeeper App | Model & Form Sections of Update and View
 
-#### Why this course?
+Code found in the `scorekeeper-player-form` directory
 
-Do you ever feel overwhelmed with new technologies? I think most of us do, there is so much change constantly happening and the pace of change seems to be increasing.
+## Completing the Form Section
 
-What can you do to manage the learning challenges facing software developers?
+Code found in the `scorekeeper-player-form-save-cancel` directory
 
-#### Lean learning
+## Creating the Player Section
 
-I don't want to waste your time, so you'll learn just what you need to know as quickly as possible. You'll start this course with the end in mind. What do I mean by that? We're going to be building a web application, and you'll learn just what you need to build the app.
+Code found in the `scorekeeper-player-section` directory
 
+## Creating the Play Section
+
+Code found in the `scorekeeper-plays-section` directory
