@@ -30,20 +30,16 @@ type Msg
     | NewFace ( Int, Int )
 
 
-
--- generate : (a -> msg) -> Generator a -> Cmd msg
--- andThen : Generator a -> (a -> Generator b) -> Generator b
--- pair : Generator a -> Generator b -> Generator (a, b)
---
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Roll ->
             let
+                diceRoll =
+                    Random.int 1 6
+
                 cmd =
-                    Random.generate NewFace (Random.pair (Random.int 1 6) (Random.int 1 6))
+                    Random.generate NewFace (Random.pair diceRoll diceRoll)
             in
                 ( model, cmd )
 
