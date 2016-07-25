@@ -219,7 +219,7 @@ pointsTotal model =
     in
         footer []
             [ div [] [ text "Total:" ]
-            , div [] [ text (toString total) ]
+            , div [] [ text <| toString total ]
             ]
 
 
@@ -233,7 +233,7 @@ showPlays model =
 
 playList : Model -> Html Msg
 playList model =
-    ul [] (List.map showPlay model.plays)
+    ul [] <| List.map showPlay model.plays
 
 
 playListHeading : Html Msg
@@ -253,19 +253,19 @@ showPlayer editId player =
             ]
             []
         , div
-            [ class (editPlayerClass player editId) ]
+            [ class <| editPlayerClass player editId ]
             [ text player.name ]
         , button
             [ type' "button"
-            , onClick (Score player 2)
+            , onClick <| Score player 2
             ]
             [ text "2pt" ]
         , button
             [ type' "button"
-            , onClick (Score player 3)
+            , onClick <| Score player 3
             ]
             [ text "3pt" ]
-        , div [] [ text (toString player.points) ]
+        , div [] [ text <| toString player.points ]
         ]
 
 
@@ -278,7 +278,7 @@ showPlay play =
             ]
             []
         , div [] [ text play.name ]
-        , div [] [ text (toString play.points) ]
+        , div [] [ text <| toString play.points ]
         ]
 
 
@@ -290,7 +290,7 @@ playerForm model =
             , placeholder "Add/Edit Player..."
             , onInput Input
             , value model.playerName
-            , class (editInputClass model.playerId)
+            , class <| editInputClass model.playerId
             ]
             []
         , button [ type' "submit" ] [ text "Save" ]
