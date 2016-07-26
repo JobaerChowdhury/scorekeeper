@@ -10,17 +10,50 @@ import Html.App as App
 
 
 type alias Model =
-    Int
+    { count : Int
+    , max : Int
+    , min : Int
+    }
 
 
 init : Int -> Model
 init i =
-    i
+    Model i i i
 
 
 initModel : Model
 initModel =
     init 1
+
+
+inc : Model -> Model
+inc model =
+    let
+        newCount =
+            model.count + 1
+
+        maximum =
+            if (newCount > model.max) then
+                newCount
+            else
+                model.max
+    in
+        { model | count = newCount, max = maximum }
+
+
+dec : Model -> Model
+dec model =
+    let
+        newCount =
+            model.count - 1
+
+        minimum =
+            if (newCount < model.min) then
+                newCount
+            else
+                model.min
+    in
+        { model | count = newCount, min = minimum }
 
 
 
@@ -36,10 +69,10 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Inc ->
-            model + 1
+            inc model
 
         Dec ->
-            model - 1
+            dec model
 
 
 
@@ -50,7 +83,10 @@ view : Model -> Html Msg
 view model =
     div []
         [ button [ type' "button", onClick Dec ] [ text "-" ]
-        , div [ countStyle ] [ text (toString model) ]
+        , div [ countStyle ]
+            [ text (toString model.count)
+            , text ("(" ++ (toString model.max) ++ ", " ++ (toString model.min) ++ ")")
+            ]
         , button [ type' "button", onClick Inc ] [ text "+" ]
         ]
 
@@ -61,7 +97,7 @@ countStyle =
         [ ( "font-size", "20px" )
         , ( "font-family", "monospace" )
         , ( "display", "inline-block" )
-        , ( "width", "50px" )
+        , ( "width", "150px" )
         , ( "text-align", "center" )
         ]
 
