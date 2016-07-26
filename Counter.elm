@@ -13,12 +13,13 @@ type alias Model =
     { count : Int
     , max : Int
     , min : Int
+    , total : Int
     }
 
 
 init : Int -> Model
 init i =
-    Model i i i
+    Model i i i 0
 
 
 initModel : Model
@@ -38,7 +39,7 @@ inc model =
             else
                 model.max
     in
-        { model | count = newCount, max = maximum }
+        { model | count = newCount, max = maximum, total = model.total + 1 }
 
 
 dec : Model -> Model
@@ -53,7 +54,7 @@ dec model =
             else
                 model.min
     in
-        { model | count = newCount, min = minimum }
+        { model | count = newCount, min = minimum, total = model.total + 1 }
 
 
 
@@ -86,6 +87,7 @@ view model =
         , div [ countStyle ]
             [ text (toString model.count)
             , text ("(" ++ (toString model.max) ++ ", " ++ (toString model.min) ++ ")")
+            , text ("[" ++ (toString model.total) ++ "]")
             ]
         , button [ type' "button", onClick Inc ] [ text "+" ]
         ]
@@ -97,7 +99,7 @@ countStyle =
         [ ( "font-size", "20px" )
         , ( "font-family", "monospace" )
         , ( "display", "inline-block" )
-        , ( "width", "150px" )
+        , ( "width", "200px" )
         , ( "text-align", "center" )
         ]
 
